@@ -72,8 +72,12 @@ def reg_vote(name):
         "SELECT rating FROM " + table_name + " WHERE userid = %(name_hash)s GROUP BY rating HAVING SUM(sign) > 0",
         {"name_hash": str(name_hash)})
 
-    # insert deletion row
+    # insert deletion row or skip
     if len(rating) > 0:
+        if int(rating[0][0]) == int(score):
+            app.logger.info("Score matches previous... skipping")
+            return "OK"
+
         app.logger.info("Detected prev val. Deleting: " + str(rating) + " from: " + str(name))
         client.execute("INSERT INTO " + table_name + " VALUES", [[name_hash, int(rating[0][0]), datetime.now(), -1]])
 
