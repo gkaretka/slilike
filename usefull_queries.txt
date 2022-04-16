@@ -1,0 +1,12 @@
+//describe table SLILIKE.ratings;
+//select count(userid) from SLILIKE.ratings;
+//SELECT count(userid) FROM SLILIKE.ratings FINAL;
+//SELECT count(*) FROM SLILIKE.ratings;
+//select * from SLILIKE.ratingsV2;
+//select userid, datetime, SUM(rating * sign) from SLILIKE.ratings GROUP BY userid, datetime HAVING sum(sign) > 0
+//select AVG(rating * sign) from SLILIKE.ratings HAVING sum(sign) > 0
+//SELECT rating FROM SLILIKE.ratings WHERE userid = 2 GROUP BY rating HAVING SUM(sign) > 0;
+//INSERT INTO SLILIKE.ratings VALUES (2, 3, NOW(), -1)
+//SELECT COUNT(rating * sign), rating FROM SLILIKE.ratings GROUP BY rating HAVING SUM(sign) > 0
+//optimize table SLILIKE.ratings
+//select AVG(S_SUM) from (select SUM(rating * sign) as S_SUM from SLILIKE.ratingsV2 HAVING SUM(sign) > 0)

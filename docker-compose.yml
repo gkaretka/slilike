@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  dev:
+    build: .
+    volumes:
+      - c:/Users/gkaretka/Documents/GitHub/slilike/:/slilike/
+    ports:
+      - "8080:5000"
+    environment:
+      FLASK_ENV: development
+    depends_on:
+      - clickhouse_db
+
+  clickhouse_db:
+    image: clickhouse/clickhouse-server
+    ports:
+      - "8123:8123"
+      - "9000:9000"

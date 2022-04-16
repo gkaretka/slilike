@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<h1>How would you rate this page (1 good - 5 bad)? </h1>
+<p>View <a href="/results">results</a></p>
+<form>
+    <input placeholder="User name" type="text" id="u_name">
+    <input type="range" min="1" max="5" value="5" class="slider" id="score">
+    <p id="res_val">Rating: 5</p>
+    <button id="sbmt" type="submit">Vote!</button>
+</form>
+<script>
+$(document).on('input', '#score', function() {
+    _val = $(this).val();
+    $("#res_val").html("Rating: " + _val);
+});
+
+$("#sbmt").click(function(event){
+    event.preventDefault();
+
+    _name = $("#u_name").val();
+    _score = $("#score").val();
+
+    $.ajax({
+        url: "/vote/" + _name,
+        method: "POST",
+        data: {score: _score },
+    }).done(function() {
+        alert("Done!");
+    });
+});
+
+</script>
+{% endblock %}
