@@ -1,5 +1,28 @@
 version: "3.9"
 services:
+  clickhouse_db:
+    image: clickhouse/clickhouse-server
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+      - "9009:9009"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+    depends_on:
+      - clickhouse_db
+
   dev:
     build: .
     volumes:
@@ -10,9 +33,3 @@ services:
       FLASK_ENV: development
     depends_on:
       - clickhouse_db
-
-  clickhouse_db:
-    image: clickhouse/clickhouse-server
-    ports:
-      - "8123:8123"
-      - "9000:9000"

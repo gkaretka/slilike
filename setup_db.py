@@ -11,19 +11,21 @@ def setup_db(app: Flask, table_name: string):
     while client is None:
         try:
             client = Client('clickhouse_db')
-        except:
-            app.logger.info("Error connecting to database! Reconnecting...")
+            app.logger.info("Databse running")
 
-    s_q = """
-    CREATE TABLE IF NOT EXISTS """ + table_name + """
-    (
-    userid UInt64,
-    rating Int8,
-    datetime DateTime64(3, 'Europe/Prague'),
-    sign Int8
-    )
-    ENGINE = CollapsingMergeTree(sign) ORDER BY userid;
-    """
+            s_q = """
+            CREATE TABLE IF NOT EXISTS """ + table_name + """
+            (
+            userid UInt64,
+            rating Int8,
+            datetime DateTime64(3, 'Europe/Prague'),
+            sign Int8
+            )
+            ENGINE = CollapsingMergeTree(sign) ORDER BY userid;
+            """
 
-    client.execute(s_q)
-    client.disconnect()
+            client.execute(s_q)
+            client.disconnect()
+
+        except Exception as e:
+            app.logger.error("Error connecting to database! Reconnecting...")

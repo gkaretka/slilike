@@ -51,5 +51,6 @@ def insert_random_ratings(user_cnt, debug_window=1):
     client.disconnect()
 
 
+#insert_random_ratings(100)
 #insert_random_ratings(100000, debug_window=1000)
-read_query()
+#read_query()

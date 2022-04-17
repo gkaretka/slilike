@@ -23,14 +23,14 @@ def index():
 def view_results():
     client = Client("clickhouse_db")
 
-    t1 = int(time.time() * 10000)
+    t1 = int(time.perf_counter() * 10000)
 
     avg_score = client.execute(
         "select AVG(S_SUM) from (select SUM(rating * sign) as S_SUM from " + table_name + " GROUP BY userid HAVING SUM(sign) > 0)")
     if len(avg_score) > 0:
         app.logger.info("Avg score: " + str(avg_score[0]))
     else:
-        t2 = int(time.time() * 10000)
+        t2 = int(time.perf_counter() * 10000)
         context = {
             "empty": True,
             "render_time": str((t2 - t1) / 10.0),
@@ -44,7 +44,7 @@ def view_results():
     data = client.execute(
         "select userid, SUM(rating * sign) from " + table_name + " GROUP BY userid HAVING SUM(sign) > 0 LIMIT 10")
 
-    t2 = int(time.time() * 10000)
+    t2 = int(time.perf_counter() * 10000)
 
     starsum = 0
     for i in range(len(star_stats)):
