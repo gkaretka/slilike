@@ -10,40 +10,51 @@ Average score: {{ context.avg_score[0] }}
 {% else %}
 Not enough data
 {% endif %}
-<table class="table">
-    <tr>
-        <th>Stars</th>
-        <th>Number of reviews per star</th>
-    </tr>
-    {% if not context.empty %}
-    {% for star_stat in context.star_stats %}
-    <tr>
-        <td>{{ star_stat.1 }}</td>
-        <td>{{ star_stat.0 }}</td>
-    </tr>
-    {% endfor %}
-    <tr style="border-bottom: 1px solid #000;">
-    <tr>
-        <td>SUM</td>
-        <td>{{ context.star_stats_sum }}</td>
-    </tr>
-    {% endif %}
-</table>
+<div class="row">
+    <div class="col">
+        <table class="table">
+            <tr>
+                <th>Stars</th>
+                <th>Number of reviews per star</th>
+            </tr>
+            {% if not context.empty %}
+            {% for star_stat in context.star_stats %}
+            <tr>
+                <td>{{ star_stat.1 }}</td>
+                <td>{{ star_stat.0 }}</td>
+            </tr>
+            {% endfor %}
+            <tr style="border-bottom: 1px solid #000;">
+            <tr>
+                <td>SUM</td>
+                <td>{{ context.star_stats_sum }}</td>
+            </tr>
+            {% endif %}
+        </table>
 
-<table class="table">
-    <tr>
-        <th>UserID</th>
-        <th>Rating</th>
-    </tr>
-    {% if not context.empty %}
-    {% for r in context.data %}
-    <tr>
-        <td>{{ r.0 }}</td>
-        <td>{{ r.1 }}</td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
-
-<p>SQL processing time: {{ context.render_time }} ms at {{ context.star_stats_sum }} rows</p>
+        <table class="table">
+            <tr>
+                <th>UserID</th>
+                <th>Rating</th>
+            </tr>
+            {% if not context.empty %}
+            {% for r in context.data %}
+            <tr>
+                <td>{{ r.0 }}</td>
+                <td>{{ r.1 }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+    <div class="col">
+        <img src="{{ context.word_cloud }}"/>
+    </div>
+</div>
+<div class="row">
+    <p>SQL processing time: {{ context.render_time }} [ms] at {{ context.star_stats_sum }} rows with
+        table: {{ context.table }} and {{ context.table }}{{ context.table_word }}</p>
+    <p>Word Cloud SQL processing time {{context.word_cloud_query_time}} [ms], with graphics generation time: {{
+        context.word_cloud_gen_time }} [ms] (porting to front-end would be better)</p>
+</div>
 {% endblock %}

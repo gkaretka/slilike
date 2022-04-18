@@ -23,6 +23,9 @@ This is a simple results page with some basic data preview
 [(http://127.0.0.1:8080/results)](http://127.0.0.1:8080/results).
 ![input](readme_imgs/results.png)
 
+In V2 word map has been added! This utilizes `MergeTree` table engine since no deletion is necessary.
+![results](readme_imgs/word_cloud.png)
+
 Also Grafana with `grafana-clickhouse-datasource` (datasource plugin for ClickHouse) is included so 
 feel free to tinker with it.
 This is a simple results page with some basic data preview using `Grafana` 

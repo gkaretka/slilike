@@ -11,3 +11,5 @@ Werkzeug==2.1.1
 wheel==0.36.2
 zipp==3.8.0
 clickhouse-driver==0.2.3
+wordcloud~=1.8.1
+matplotlib~=3.5.1

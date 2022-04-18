@@ -6,19 +6,31 @@
 {% block content %}
 <h1>How would you rate this page (1 good - 5 bad)? </h1>
 <p>View <a href="/results">results</a></p>
-<form>
-    <input placeholder="User name" type="text" id="u_name">
-    <input type="range" min="1" max="5" value="5" class="slider" id="score">
-    <p id="res_val">Rating: 5</p>
-    <button id="sbmt" type="submit">Vote!</button>
-</form>
+
+<div class="row">
+    <div class="col">
+        <form>
+            <input placeholder="User name" type="text" id="u_name" class="form-control">
+            <input type="range" min="1" max="5" value="5" class="slider" id="score">
+            <p id="res_val">Rating: 5</p>
+            <button id="sbmt_rating" class="form-control" type="submit">Vote!</button>
+        </form>
+    </div>
+
+    <div class="col">
+        <form>
+            <input placeholder="Verbal rating (eg. Great!)" class="form-control" type="text" id="word">
+            <button id="sbmt_verb" type="submit" class="form-control">Vote!</button>
+        </form>
+    </div>
+</div>
 <script>
 $(document).on('input', '#score', function() {
     _val = $(this).val();
     $("#res_val").html("Rating: " + _val);
 });
 
-$("#sbmt").click(function(event){
+$("#sbmt_rating").click(function(event){
     event.preventDefault();
 
     _name = $("#u_name").val();
@@ -29,7 +41,22 @@ $("#sbmt").click(function(event){
         method: "POST",
         data: {score: _score },
     }).done(function() {
-        alert("Done!");
+        alert("Rating submitted!");
+    });
+});
+
+$("#sbmt_verb").click(function(event){
+    event.preventDefault();
+
+    _name = $("#u_name").val();
+    _word = $("#word").val();
+
+    $.ajax({
+        url: "/word/" + _name,
+        method: "POST",
+        data: {word: _word },
+    }).done(function() {
+        alert("Word submitted!");
     });
 });
 
