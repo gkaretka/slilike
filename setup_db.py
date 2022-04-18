@@ -11,7 +11,12 @@ def setup_db(app: Flask, table_name: string):
     while client is None:
         try:
             client = Client('clickhouse_db')
-            app.logger.info("Databse running")
+            app.logger.info("Database running")
+
+            s_q = """
+            CREATE DATABASE IF NOT EXISTS SLILIKE
+            """
+            client.execute(s_q)
 
             s_q = """
             CREATE TABLE IF NOT EXISTS """ + table_name + """

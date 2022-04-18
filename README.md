@@ -29,7 +29,8 @@ This is a simple results page with some basic data preview using `Grafana`
 [(http://127.0.0.1:3000/)](http://127.0.0.1:3000/). Username: `admin`, password `admin`.
 ![input](readme_imgs/easy_grafana_integration.png)
 
-In order to connect `Grafana` with this `ClickHouse` instance, use these parameters for data source plugin:
+In order to connect `Grafana` with this `ClickHouse` instance, use these parameters for data 
+source plugin (these can be modified in `docker-compose.yml`):
 
 - Server address: `clickhouse_db`
 - Server port: `9000`
@@ -43,4 +44,15 @@ In order to test some simple queries, here is an example (calculate average rati
 
 Application stores "ratings" for some random poll. These can be modified, each user can vote only
 once (no login check, just type your nickname :) ). Results present average score, number of 
-ratings for each category and first 10 ratings. 
+ratings for each category and first 10 ratings.
+
+In order to populate database fast, there are some basic scripts prepared in `insert_many_values.py`.
+These can be used to insert single data or data in batches. For example inserting 2,000,000 rows 
+took 113125.5 [ms] = 113.1255 [s]. This also includes processing time.
+
+Results page shows that SQL processing time is 194.3 ms at 2,000,000 rows. Previously mentioned 
+query for calculating average rating takes around 25 [ms] on 100,000 rows and around 100 [ms] 
+on 2,000,000 rows on my notebook.
+![input](readme_imgs/results_2M.png)
+These values can be improved by running `Distributed Table Engine`
+on `ClickHouse` databases (multiple servers), in this case the bottleneck is network latency.

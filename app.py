@@ -6,9 +6,10 @@ from clickhouse_driver import Client
 
 from setup_db import setup_db
 
+# ratingsV3
 # ratingsV2
 # ratings
-table_name = "SLILIKE.ratings"
+table_name = "SLILIKE.ratingsV3"
 
 app = Flask(__name__)
 setup_db(app, table_name)
