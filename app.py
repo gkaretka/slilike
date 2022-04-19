@@ -9,7 +9,6 @@ from backend.constants import table_name, word_suffix
 from backend.wordcloud import create_word_cloud_from_data
 from backend.setup_db import setup_db
 
-
 app = Flask(__name__)
 setup_db(app, table_name, word_suffix)
 
@@ -51,29 +50,19 @@ def view_results():
     # word cloud results
     wt1 = int(time.perf_counter() * 10000)
 
-    word_hash_cnt = {}
     words = client.execute(
-        "SELECT word, count(word_unique_hash), word_unique_hash FROM " + table_name
-        + word_suffix + " GROUP BY word_unique_hash, word ORDER BY word_unique_hash")
-
-    app.logger.info("Selected " + str(len(words)) + " words from")
+        """SELECT word, SUM(CNT) OVER (PARTITION BY word_unique_hash) 
+        FROM (SELECT word, COUNT(word_unique_hash) as CNT, word_unique_hash FROM """ + table_name
+        + word_suffix + """ GROUP BY word_unique_hash, word ORDER BY word_unique_hash) 
+        GROUP BY word_unique_hash, word, CNT LIMIT 1 BY word_unique_hash""")
 
     all_words_cnt = 0
-    for word, cnt, hsh in words:
-        if word_hash_cnt.get(hsh, 0) == 0:
-            word_hash_cnt[hsh] = [word, cnt]
-            all_words_cnt += cnt
-        else:
-            word_hash_cnt[hsh] = [word, word_hash_cnt[hsh][1] + cnt]
-            all_words_cnt += cnt
-
-    words_str = ""
-    for val in word_hash_cnt:
-        for i in range(word_hash_cnt[val][1]):
-            words_str += word_hash_cnt[val][0].replace(" ", "_") + " "
+    for val in words:
+        word_cnt = val[1]
+        all_words_cnt += word_cnt
 
     wt1_0 = int(time.perf_counter() * 10000)
-    word_cloud = create_word_cloud_from_data(words_str)
+    word_cloud = create_word_cloud_from_data(words)
     wt2 = int(time.perf_counter() * 10000)
 
     context = {
