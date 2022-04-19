@@ -26,7 +26,7 @@ services:
   dev:
     build: .
     volumes:
-      - c:/Users/gkaretka/Documents/GitHub/slilike/:/slilike/
+      - .:/slilike/
     ports:
       - "8080:5000"
     environment:
