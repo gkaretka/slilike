@@ -10,7 +10,7 @@ from wordcloud import WordCloud
 def create_word_cloud_from_data(words):
     wordcloud = WordCloud(width=800, height=800,
                           background_color='white',
-                          min_font_size=10).generate(words)
+                          min_font_size=10, collocations=False).generate(words)
 
     image = wordcloud.to_image()
     io_bytes = io.BytesIO()

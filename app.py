@@ -1,20 +1,14 @@
 import hashlib
 import re
-import functools
 import time
 from datetime import datetime
 from flask import Flask, render_template, request
 from clickhouse_driver import Client
 
-from logic.setup_db import setup_db
+from backend.constants import table_name, word_suffix
+from backend.wordcloud import create_word_cloud_from_data
+from backend.setup_db import setup_db
 
-# ratingsV3
-# ratingsV2
-# ratings
-from logic.wordcloud import create_word_cloud_from_data
-
-table_name = "SLILIKE.ratings"
-word_suffix = "_word"
 
 app = Flask(__name__)
 setup_db(app, table_name, word_suffix)
@@ -62,18 +56,21 @@ def view_results():
         "SELECT word, count(word_unique_hash), word_unique_hash FROM " + table_name
         + word_suffix + " GROUP BY word_unique_hash, word ORDER BY word_unique_hash")
 
+    app.logger.info("Selected " + str(len(words)) + " words from")
+
+    all_words_cnt = 0
     for word, cnt, hsh in words:
         if word_hash_cnt.get(hsh, 0) == 0:
             word_hash_cnt[hsh] = [word, cnt]
+            all_words_cnt += cnt
         else:
             word_hash_cnt[hsh] = [word, word_hash_cnt[hsh][1] + cnt]
+            all_words_cnt += cnt
 
     words_str = ""
-    app.logger.info(word_hash_cnt)
     for val in word_hash_cnt:
         for i in range(word_hash_cnt[val][1]):
             words_str += word_hash_cnt[val][0].replace(" ", "_") + " "
-    app.logger.info(words_str)
 
     wt1_0 = int(time.perf_counter() * 10000)
     word_cloud = create_word_cloud_from_data(words_str)
@@ -90,6 +87,8 @@ def view_results():
         "word_cloud": word_cloud,
         "word_cloud_gen_time": str((wt2 - wt1) / 10.0),
         "word_cloud_query_time": str((wt1_0 - wt1) / 10.0),
+        "word_cloud_unique_cnt": str(len(words)),
+        "word_cloud_all_cnt": str(all_words_cnt),
     }
 
     return render_template("results.html", context=context)
