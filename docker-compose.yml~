@@ -9,6 +9,7 @@ services:
 
   slilike_grafana:
     image: grafana/grafana:latest
+    container_name: grafana
     hostname: grafana
     ports:
       - "3000:3000"
