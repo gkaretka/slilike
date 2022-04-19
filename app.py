@@ -62,6 +62,8 @@ def view_results():
         all_words_cnt += word_cnt
 
     wt1_0 = int(time.perf_counter() * 10000)
+    if len(words) == 0:
+        words = [["None", 1]]
     word_cloud = create_word_cloud_from_data(words)
     wt2 = int(time.perf_counter() * 10000)
 
@@ -85,7 +87,7 @@ def view_results():
 
 @app.route("/vote/<name>", methods=["POST"])
 def reg_vote(name):
-    name_hash = int.FROM_bytes(hashlib.sha256(name.encode("ascii")).digest()[:8], "little")
+    name_hash = int.from_bytes(hashlib.sha256(name.encode("ascii")).digest()[:8], "little")
     score = request.values.get("score")
     app.logger.info("Received rating: " + str(score) + " FROM: " + str(name))
 
