@@ -55,7 +55,7 @@ Not enough data
     <p>SQL processing time: {{ context.render_time }} [ms] at {{ context.star_stats_sum }} rows with
         table: {{ context.table }} and {{ context.table }}{{ context.table_word }}</p>
     <p>Word Cloud SQL processing time {{context.word_cloud_query_time}} [ms],
-        with {{ context.word_cloud_cnt }} unique words in {{ context.word_cloud_all_cnt }} entries.
+        with {{ context.word_cloud_unique_cnt }} unique words in {{ context.word_cloud_all_cnt }} entries.
         With graphics generation time: {{ context.word_cloud_gen_time }} [ms]
         (porting to front-end would be better)</p>
 </div>
