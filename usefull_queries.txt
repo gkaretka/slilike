@@ -10,3 +10,5 @@
 //SELECT COUNT(rating * sign), rating FROM SLILIKE.ratings GROUP BY rating HAVING SUM(sign) > 0
 //optimize table SLILIKE.ratings
 //select AVG(S_SUM) from (select SUM(rating * sign) as S_SUM from SLILIKE.ratingsV2 HAVING SUM(sign) > 0)
+//SELECT word, SUM(cnt) over (partition by word_unique_hash) from (SELECT word, count(word_unique_hash) as cnt, word_unique_hash FROM SLILIKE.ratings_word GROUP BY word_unique_hash, word ORDER BY word_unique_hash) GROUP BY word_unique_hash, word, cnt LIMIT 1 BY word_unique_hash
+//SELECT * from SLILIKE.ratingsV2_word
